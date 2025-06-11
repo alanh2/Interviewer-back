@@ -54,10 +54,7 @@ ${history.map(h => `Pregunta: ${h.question}\nRespuesta: ${h.answer}`).join('\n')
 
 Ahora tu tarea es continuar la entrevista. Tené en cuenta lo siguiente:
 	1.	Si la última respuesta fue vaga o muy general, podés hacer una única repregunta para obtener más claridad o detalle.
-	2.	Si la respuesta fue clara o interesante, comentá brevemente antes de avanzar con la siguiente pregunta "${nextQuestion}". Podés decir cosas como:
-	•	“Interesante enfoque, muchas gracias por compartirlo.”
-	•	“Eso me da una buena idea de cómo pensás sobre el tema.”
-	•	“Clarísimo, suena como una experiencia valiosa.”
+	2.	Si la respuesta fue clara o interesante, comentá brevemente antes de avanzar con la siguiente pregunta "${nextQuestion}". Podés decir en alguna oportunidad cosas como: “Interesante enfoque, muchas gracias por compartirlo.” o “Eso me da una buena idea de cómo pensás sobre el tema.” o	“Clarísimo, suena como una experiencia valiosa.”
 	3.	Podés conectar con una respuesta anterior si tiene relación con la siguiente pregunta (ej: “Ya que mencionaste X, me interesa saber…”).
 	4.	Si la siguiente pregunta es “Fin”, terminá la entrevista de forma cordial, profesional y natural, como lo haría una entrevistadora de recursos humanos en Argentina (por ejemplo: “Gracias por tu tiempo, fue un gusto conocerte y entender mejor tu perfil. En breve te vamos a estar contactando con los próximos pasos”).
 
