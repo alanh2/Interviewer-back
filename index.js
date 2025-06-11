@@ -22,6 +22,7 @@ app.post('/ask', async (req, res) => {
     if (!currentAnswer && history.length === 0) {
         // Saludo inicial
         const initialGreeting = nextQuestion || "Hola, bienvenido a la entrevista. ¿Por qué estás interesado en esta posición en Selenios?";
+        console.time('openai_speech_initial_greeting');
         const mp3 = await openai.audio.speech.create({
             model: speechModel,
             voice: voice,
@@ -29,6 +30,7 @@ app.post('/ask', async (req, res) => {
             instructions: instructions,
             response_format: responseFormat
         });
+        console.timeEnd('openai_speech_initial_greeting');
 
         const buffer = Buffer.from(await mp3.arrayBuffer());
         const base64Audio = buffer.toString('base64');
@@ -39,6 +41,7 @@ app.post('/ask', async (req, res) => {
     if (nextQuestion === "Fin") {
         // Saludo inicial
         const endGreeting = "Muchas gracias por tu tiempo y respuestas. Ha sido un placer entrevistarte. Nos pondremos en contacto pronto con los resultados de la entrevista.";
+        console.time('openai_speech_end_greeting');
         const mp3 = await openai.audio.speech.create({
             model: speechModel,
             voice: voice,
@@ -46,6 +49,7 @@ app.post('/ask', async (req, res) => {
             instructions: instructions,
             response_format: responseFormat
         });
+        console.timeEnd('openai_speech_end_greeting');
 
         const buffer = Buffer.from(await mp3.arrayBuffer());
         const base64Audio = buffer.toString('base64');
@@ -56,14 +60,17 @@ app.post('/ask', async (req, res) => {
     const prompt = createPrompt(history, currentAnswer, nextQuestion || "no hay mas preguntas");
 
     // 1. Obtener respuesta del entrevistador
+    console.time('openai_chat_completion');
     const chatResponse = await openai.chat .completions.create({
       model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: prompt }],
     });
+    console.timeEnd('openai_chat_completion');
 
     const aiText = chatResponse.choices[0].message.content;
 
     // 2. Generar audio con TTS (voz natural en español)
+    console.time('openai_speech_tts_response');
     const ttsResponse = await openai.audio.speech.create({
       model: speechModel,
       voice: voice,
@@ -71,12 +78,13 @@ app.post('/ask', async (req, res) => {
       instructions: instructions,
       response_format: responseFormat
     });
+    console.timeEnd('openai_speech_tts_response');
 
     const audioBuffer = Buffer.from(await ttsResponse.arrayBuffer());
 
     // Guardamos temporalmente el audio o lo servimos como base64 para prueba rápida
     const base64Audio = audioBuffer.toString('base64');
-    console.log('Audio generado correctamente');
+    console.log('Current question:', aiText);
     res.json({
       text: aiText,
       audio: `data:audio/mpeg;base64,${base64Audio}`,
