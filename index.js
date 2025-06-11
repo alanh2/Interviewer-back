@@ -11,6 +11,10 @@ const speechModel = 'gpt-4o-mini-tts'; // Modelo de TTS para voz natural
 const voice = 'nova'; // Voz natural en español
 const responseFormat = 'opus'
 const instructions = 'Actuá como una entrevistadora de recursos humanos en Argentina. Tu voz debe ser la de una mujer joven, seria y profesional, que transmite confianza y autoridad, pero sin sonar rígida, haciendo una pausa minima luego de una coma y el doble al haber un punto. El tono debe ser argentino, en castellano rioplatense, y tu forma de hablar tiene que ser clara, rápida y precisa, con ese ritmo ágil típico de una conversación en una ciudad grande como Buenos Aires. Tu pronunciación debe reflejar la entonación porteña, con seseo y uso natural del voseo (por ejemplo, "vos tenés", "¿cómo te llamás?"). Evitá modismos exagerados, pero mantené una identidad local auténtica. Estás entrevistando a un candidato para una posición, así que hablá con interés genuino, concisión, y profesionalismo, como si estuvieras en una llamada de selección laboral. Features: Uses informal, straight-to-the-point language, throws in some dry humor, and keeps the energy just on the edge of impatience but still helpful.';
+const PORT = process.env.PORT || 3001;
+
+app.get("/", (req, res) => res.send("Express on Vercel"));
+
 app.post('/ask', async (req, res) => {
   try {
     const { history, currentAnswer, nextQuestion } = req.body;
@@ -83,7 +87,4 @@ app.post('/ask', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`🧠 AI Interviewer backend corriendo en http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log("Server ready on port 3000."));
