@@ -61,7 +61,7 @@ app.post('/ask', async (req, res) => {
 
     // 1. Obtener respuesta del entrevistador
     console.time('openai_chat_completion');
-    const chatResponse = await openai.chat .completions.create({
+    const chatResponse = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: prompt }],
     });
