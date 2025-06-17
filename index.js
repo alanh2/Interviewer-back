@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const openai = require('./openai');
-const { createPrompt } = require('./utils/prompt');
+const { createPrompt, createInterviewPrompt } = require('./utils/prompt');
 require('dotenv').config();
 
 const app = express();
@@ -10,9 +10,8 @@ app.use(express.json());
 const speechModel = 'gpt-4o-mini-tts'; // Modelo de TTS para voz natural
 const voice = 'nova'; // Voz natural en español
 const responseFormat = 'opus'
-const instructions = 'Actuá como una entrevistadora de recursos humanos en Argentina. Tu voz debe ser la de una mujer joven, seria y profesional, que transmite confianza y autoridad, pero sin sonar rígida, haciendo una pausa minima luego de una coma y el doble al haber un punto. El tono debe ser argentino, en castellano rioplatense, y tu forma de hablar tiene que ser clara, rápida y precisa, con ese ritmo ágil típico de una conversación en una ciudad grande como Buenos Aires. Tu pronunciación debe reflejar la entonación porteña, con seseo y uso natural del voseo (por ejemplo, "vos tenés", "¿cómo te llamás?"). Evitá modismos exagerados, pero mantené una identidad local auténtica. Estás entrevistando a un candidato para una posición, así que hablá con interés genuino, concisión, y profesionalismo, como si estuvieras en una llamada de selección laboral. Features: Uses informal, straight-to-the-point language, throws in some dry humor, and keeps the energy just on the edge of impatience but still helpful.';
+const instructions = 'Accent/Affect: Joven, profesional y seria, transmitiendo confianza y autoridad sin rigidez. La voz refleja el acento argentino, específicamente porteño, con seseo y uso natural del voseo. Identidad local auténtica, sin modismos exagerados. Tone: Ágil, claro y preciso. Directa y concisa, como en una conversación en Buenos Aires. Interés genuino, siempre profesional. Pacing: Rápido, propio de una ciudad grande, pero asegurando articulación clara en cada palabra. Pausa corta después de cada coma, pausa el doble de larga después de cada punto. Emotion: Energía alta, con un toque de impaciencia amable. Mantiene eficiencia, pero nunca resulta descortés. Si el candidato hace un chiste o sorprende, responde de forma natural: risa suave, comentario simpático o breve sorpresa, volviendo rápidamente al foco de la entrevista. Pronunciation: Castellano rioplatense, entonación porteña. Uso natural del voseo (por ejemplo, “vos tenés”, “¿cómo te llamás?”). Claridad y coherencia en la pronunciación, evitando modismos exagerados. Personality Affect: Joven, segura y enfocada, con humor seco ocasional. Amable, directa y cercana. Siempre mantiene el profesionalismo y el objetivo de la entrevista, mostrando humanidad y reacción auténtica ante lo inesperado, pero retomando enseguida la dinámica profesional.';
 const PORT = process.env.PORT || 3000;
-
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
 app.post('/ask', async (req, res) => {
@@ -58,6 +57,7 @@ app.post('/ask', async (req, res) => {
     }
 
     const prompt = createPrompt(history, currentAnswer, nextQuestion || "no hay mas preguntas");
+    //const prompt = createInterviewPrompt(history, currentAnswer, nextQuestion || "no hay mas preguntas");
 
     // 1. Obtener respuesta del entrevistador
     console.time('openai_chat_completion');
